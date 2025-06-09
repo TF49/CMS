@@ -52,7 +52,6 @@ public class MainFrame extends JFrame implements ActionListener {
         tabbedPane.addTab("数据管理", null, new ManagePanel(), "查看/编辑已录入数据");
         tabbedPane.addTab("备份恢复", null, createDummyPanel("备份恢复"), "数据库备份与恢复操作");
 
-
         setVisible(true);
     }
 

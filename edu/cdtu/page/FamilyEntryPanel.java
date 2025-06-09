@@ -9,10 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FamilyEntryPanel extends JPanel implements ActionListener{
+public class FamilyEntryPanel extends JPanel implements ActionListener {
 
     private JTextField familyIdField;
     private JTextField memberNameField;
@@ -20,8 +22,7 @@ public class FamilyEntryPanel extends JPanel implements ActionListener{
     private JTextField idCardField;
     private JSpinner ageSpinner;
     private JTextArea remarksArea;
-    private JButton addButton;
-    private JButton submitButton;
+    private JButton addButton,submitButton,deleteButton,updateButton;
     private JTextField phoneField;       // 联系电话
     private JTextField addressField;     // 家庭住址
 
@@ -111,7 +112,15 @@ public class FamilyEntryPanel extends JPanel implements ActionListener{
         ComponentStyle.setDefaultButtonStyle(addButton, fieldX, startY + 18 * rowHeight, 90, 40, formPanel);
 
         submitButton = new JButton("提交");
-        ComponentStyle.setDefaultButtonStyle(submitButton, fieldX + 110, startY + 18* rowHeight, 90, 40, formPanel);
+        ComponentStyle.setDefaultButtonStyle(submitButton, fieldX + 130, startY + 18 * rowHeight, 90, 40, formPanel);
+
+        // 删除按钮
+        deleteButton = new JButton("删除");
+        ComponentStyle.setDefaultButtonStyle(deleteButton, fieldX, startY + 20 * rowHeight, 90, 40, formPanel);
+
+        // 修改按钮
+        updateButton = new JButton("修改");
+        ComponentStyle.setDefaultButtonStyle(updateButton, fieldX + 130, startY + 20 * rowHeight, 90, 40, formPanel);
 
         // 成员列表（右侧）
         familyListModel = new DefaultListModel<>();
@@ -127,6 +136,37 @@ public class FamilyEntryPanel extends JPanel implements ActionListener{
         // 添加按钮事件
         addButton.addActionListener(e -> addFamilyMember());
         submitButton.addActionListener(e -> submitFamilyData());
+
+        // 删除 & 修改按钮事件
+        deleteButton.addActionListener(e -> deleteSelectedMember());
+        updateButton.addActionListener(e -> updateSelectedMember());
+
+        // 双击列表项自动填充信息
+        familyMemberList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // 双击
+                    int index = familyMemberList.locationToIndex(e.getPoint());
+                    if (index != -1) {
+                        FamilyMember selected = pendingMembers.get(index);
+                        fillFormWithMember(selected);
+                        JOptionPane.showMessageDialog(FamilyEntryPanel.this,
+                                "已加载成员信息，请修改后点击【修改】按钮。", "提示", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        });
+    }
+
+    private void fillFormWithMember(FamilyMember member) {
+        familyIdField.setText(String.valueOf(member.getCensusId()));
+        memberNameField.setText(member.getName());
+        relationComboBox.setSelectedItem(member.getRelation());
+        idCardField.setText(member.getIdCard());
+        ageSpinner.setValue(member.getAge());
+        phoneField.setText(member.getPhone());
+        addressField.setText(member.getAddress());
+        remarksArea.setText(member.getRemarks());
     }
 
     private void addComponentsToPanel() {
@@ -176,16 +216,19 @@ public class FamilyEntryPanel extends JPanel implements ActionListener{
         member.setName(name);
         member.setRelation(relation);
         member.setIdCard(idCard);
-        member.setGender("男");
+        member.setGender("男"); // 假设默认为男
         member.setAge(age);
-        member.setPhone("");
-        member.setRemarks(remarks);
         member.setPhone(phone);
         member.setAddress(address);
+        member.setRemarks(remarks);
 
         boolean success = familyInfoDao.addFamilyMember(member);
         if (success) {
-            String entry = String.format("姓名：%s | 关系：%s | 身份证：%s | 年龄：%d | 电话：%s | 地址：%s | 备注：%s", name, relation, idCard, age, phone.isEmpty() ? "-" : phone, address.isEmpty() ? "-" : address, remarks.isEmpty() ? "-" : remarks);
+            String entry = String.format("姓名：%s | 关系：%s | 身份证：%s | 年龄：%d | 电话：%s | 地址：%s | 备注：%s",
+                    name, relation, idCard, age,
+                    phone.isEmpty() ? "-" : phone,
+                    address.isEmpty() ? "-" : address,
+                    remarks.isEmpty() ? "-" : remarks);
             familyListModel.addElement(entry);
             pendingMembers.add(member);
 
@@ -217,6 +260,88 @@ public class FamilyEntryPanel extends JPanel implements ActionListener{
         pendingMembers.clear();
     }
 
+    private void deleteSelectedMember() {
+        int selectedIndex = familyMemberList.getSelectedIndex();
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "请先选择一个成员进行删除！", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        FamilyMember selectedMember = pendingMembers.get(selectedIndex);
+        String idCard = selectedMember.getIdCard();
+
+        boolean success = familyInfoDao.deleteFamilyMemberByIdCard(idCard);
+        if (success) {
+            familyListModel.remove(selectedIndex);
+            pendingMembers.remove(selectedIndex);
+            JOptionPane.showMessageDialog(this, "删除成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "删除失败，请重试！", "错误", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void updateSelectedMember() {
+        int selectedIndex = familyMemberList.getSelectedIndex();
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "请先选择一个成员进行修改！", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String name = memberNameField.getText().trim();
+        String idCard = idCardField.getText().trim();
+        String relation = (String) relationComboBox.getSelectedItem();
+        int age = (Integer) ageSpinner.getValue();
+        String remarks = remarksArea.getText().trim();
+        String phone = phoneField.getText().trim();
+        String address = addressField.getText().trim();
+
+        if (name.isEmpty() || idCard.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "姓名和身份证号不能为空！", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String familyIdStr = familyIdField.getText().trim();
+        if (familyIdStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "请先输入家庭编号！", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int censusId;
+        try {
+            censusId = Integer.parseInt(familyIdStr);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "家庭编号必须是数字！", "错误", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        FamilyMember updatedMember = new FamilyMember();
+        updatedMember.setCensusId(censusId);
+        updatedMember.setName(name);
+        updatedMember.setRelation(relation);
+        updatedMember.setIdCard(idCard);
+        updatedMember.setGender("男");
+        updatedMember.setAge(age);
+        updatedMember.setPhone(phone);
+        updatedMember.setAddress(address);
+        updatedMember.setRemarks(remarks);
+
+        boolean success = familyInfoDao.updateFamilyMember(updatedMember);
+        if (success) {
+            pendingMembers.set(selectedIndex, updatedMember);
+
+            String entry = String.format("姓名：%s | 关系：%s | 身份证：%s | 年龄：%d | 电话：%s | 地址：%s | 备注：%s",
+                    name, relation, idCard, age,
+                    phone.isEmpty() ? "-" : phone,
+                    address.isEmpty() ? "-" : address,
+                    remarks.isEmpty() ? "-" : remarks);
+
+            familyListModel.set(selectedIndex, entry);
+            JOptionPane.showMessageDialog(this, "更新成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "更新失败，请重试！", "错误", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("家庭信息录入测试");
@@ -230,6 +355,6 @@ public class FamilyEntryPanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // 空实现
     }
 }

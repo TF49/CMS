@@ -12,7 +12,8 @@ import java.util.logging.Logger;
 /**
  * 就业与教育信息数据访问层
  */
-public class EmploymentEduDao {
+public class EmploymentEduDao
+{
 
     private static final Logger logger = Logger.getLogger(EmploymentEduDao.class.getName());
 
@@ -22,11 +23,11 @@ public class EmploymentEduDao {
      * @param info 要添加的信息对象
      * @return 是否添加成功
      */
-    public boolean addEmploymentEduInfo(EmploymentEdu info) {
+    public boolean addEmploymentEduInfo(EmploymentEdu info)
+    {
         String sql = "INSERT INTO employment_edu(name, id_card, highest_education, major, school, employment_status, job_title, company, enrollment_year, graduation_year, remarks, census_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
             stmt.setString(1, info.getName());
             stmt.setString(2, info.getIdCard());
             stmt.setString(3, info.getHighestEducation());
@@ -43,7 +44,9 @@ public class EmploymentEduDao {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             logger.severe("添加就业与教育信息失败: " + e.getMessage());
             return false;
         }
@@ -55,21 +58,22 @@ public class EmploymentEduDao {
      * @param idCard 身份证号
      * @return 是否存在
      */
-    public boolean isExistsByIdCard(String idCard) {
+    public boolean isExistsByIdCard(String idCard)
+    {
         String sql = "SELECT COUNT(*) FROM employment_edu WHERE id_card = ? AND is_deleted = 0";
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
             stmt.setString(1, idCard);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            if (rs.next())
+            {
                 return rs.getInt(1) > 0;
             }
-
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             logger.severe("根据身份证号检查是否存在失败: " + e.getMessage());
         }
-
         return false;
     }
 
@@ -79,11 +83,11 @@ public class EmploymentEduDao {
      * @param info 新的数据
      * @return 是否更新成功
      */
-    public boolean updateEmploymentEduInfo(EmploymentEdu info) {
+    public boolean updateEmploymentEduInfo(EmploymentEdu info)
+    {
         String sql = "UPDATE employment_edu SET name=?, highest_education=?, major=?, school=?, employment_status=?, job_title=?, company=?, enrollment_year=?, graduation_year=?, remarks=?, census_id=? WHERE id_card=?";
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
             stmt.setString(1, info.getName());
             stmt.setString(2, info.getHighestEducation());
             stmt.setString(3, info.getMajor());
@@ -100,7 +104,9 @@ public class EmploymentEduDao {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             logger.severe("更新就业与教育信息失败: " + e.getMessage());
             return false;
         }
@@ -112,15 +118,16 @@ public class EmploymentEduDao {
      * @param idCard 身份证号
      * @return 对应的信息对象，如果没有找到则返回 null
      */
-    public EmploymentEdu getEmploymentEduByIdCard(String idCard) {
+    public EmploymentEdu getEmploymentEduByIdCard(String idCard)
+    {
         String sql = "SELECT id, name, id_card, census_id, highest_education, major, school, employment_status, job_title, company, enrollment_year, graduation_year, remarks, create_time, update_time FROM employment_edu WHERE id_card = ? AND is_deleted = 0";
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
             stmt.setString(1, idCard);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            if (rs.next())
+            {
                 EmploymentEdu info = new EmploymentEdu();
                 info.setId(rs.getInt("id"));
                 info.setName(rs.getString("name"));
@@ -141,10 +148,11 @@ public class EmploymentEduDao {
                 return info;
             }
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             logger.severe("根据身份证号查询就业与教育信息失败: " + e.getMessage());
         }
-
         return null;
     }
 }

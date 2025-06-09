@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * 家庭成员数据访问对象
  */
-public class FamilyInfoDao {
+public class FamilyInfoDao
+{
 
     /**
      * 添加一个家庭成员信息
@@ -21,11 +22,11 @@ public class FamilyInfoDao {
      * @param member 要添加的家庭成员对象
      * @return 是否添加成功
      */
-    public boolean addFamilyMember(FamilyMember member) {
+    public boolean addFamilyMember(FamilyMember member)
+    {
         String sql = "INSERT INTO family_member(census_id, name, relation, gender, age, id_card, phone, remarks, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
             stmt.setInt(1, member.getCensusId());
             stmt.setString(2, member.getName());
             stmt.setString(3, member.getRelation());
@@ -38,8 +39,9 @@ public class FamilyInfoDao {
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
-
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
             return false;
         }

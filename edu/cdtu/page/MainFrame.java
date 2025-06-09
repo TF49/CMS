@@ -50,7 +50,6 @@ public class MainFrame extends JFrame implements ActionListener {
         tabbedPane.addTab("数据查询", null, new QueryPanel(), "查询已录入的信息");
         tabbedPane.addTab("用户管理", null, new UserManagePanel(), "系统用户管理");
         tabbedPane.addTab("数据管理", null, new ManagePanel(), "查看/编辑已录入数据");
-        tabbedPane.addTab("备份恢复", null, createDummyPanel("备份恢复"), "数据库备份与恢复操作");
 
         setVisible(true);
     }
@@ -125,8 +124,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 + "  - 家庭信息管理\n"
                 + "  - 就业与教育统计\n"
                 + "  - 用户权限控制\n"
-                + "  - 数据管理生成\n"
-                + "  - 数据库备份恢复";
+                + "  - 数据管理生成";
         JOptionPane.showMessageDialog(this, message, "关于系统", JOptionPane.INFORMATION_MESSAGE);
     }
 

@@ -118,8 +118,8 @@ public class UserDao {
     }
 
     private boolean isValidPassword(String password) {
-        // 示例规则：至少6位，且包含字母和数字
-        return password != null && password.length() >= 6 && password.matches("^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$");
+        // 密码不为空，长度至少为6，且全是数字
+        return password != null && password.length() >= 6 && password.matches("\\d{6,}");
     }
 
     /**

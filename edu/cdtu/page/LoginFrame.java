@@ -199,6 +199,7 @@ public class LoginFrame extends JFrame {
             }
 
             boolean success = userDao.changePassword(username, oldPassword, newPassword);
+
             if (success) {
                 JOptionPane.showMessageDialog(this, "密码修改成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
             } else {

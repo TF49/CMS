@@ -60,7 +60,7 @@ public class EmploymentEduDao
      */
     public boolean isExistsByIdCard(String idCard)
     {
-        String sql = "SELECT COUNT(*) FROM employment_edu WHERE id_card = ? AND is_deleted = 0";
+        String sql = "SELECT COUNT(*) FROM employment_edu WHERE id_card = ?";
         try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setString(1, idCard);
@@ -120,7 +120,7 @@ public class EmploymentEduDao
      */
     public EmploymentEdu getEmploymentEduByIdCard(String idCard)
     {
-        String sql = "SELECT id, name, id_card, census_id, highest_education, major, school, employment_status, job_title, company, enrollment_year, graduation_year, remarks, create_time, update_time FROM employment_edu WHERE id_card = ? AND is_deleted = 0";
+        String sql = "SELECT id, name, id_card, census_id, highest_education, major, school, employment_status, job_title, company, enrollment_year, graduation_year, remarks, create_time, update_time FROM employment_edu WHERE id_card = ?";
         try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setString(1, idCard);

@@ -24,18 +24,17 @@ public class FamilyInfoDao
      */
     public boolean addFamilyMember(FamilyMember member)
     {
-        String sql = "INSERT INTO family_member(census_id, name, relation, gender, age, id_card, phone, remarks, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO family_member(census_id, name, relation, age, id_card, phone, remarks, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setInt(1, member.getCensusId());
             stmt.setString(2, member.getName());
             stmt.setString(3, member.getRelation());
-            stmt.setString(4, member.getGender());
-            stmt.setInt(5, member.getAge());
-            stmt.setString(6, member.getIdCard());
-            stmt.setString(7, member.getPhone());
-            stmt.setString(8, member.getRemarks());
-            stmt.setString(9, member.getAddress());
+            stmt.setInt(4, member.getAge());
+            stmt.setString(5, member.getIdCard());
+            stmt.setString(6, member.getPhone());
+            stmt.setString(7, member.getRemarks());
+            stmt.setString(8, member.getAddress());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -75,18 +74,17 @@ public class FamilyInfoDao
      * @return 是否更新成功
      */
     public boolean updateFamilyMember(FamilyMember member) {
-        String sql = "UPDATE family_member SET name=?, relation=?, gender=?, age=?, phone=?, remarks=?, address=? WHERE id_card=?";
+        String sql = "UPDATE family_member SET name=?, relation=?, age=?, phone=?, remarks=?, address=? WHERE id_card=?";
         try (Connection conn = DbUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, member.getName());
             stmt.setString(2, member.getRelation());
-            stmt.setString(3, member.getGender());
-            stmt.setInt(4, member.getAge());
-            stmt.setString(5, member.getPhone());
-            stmt.setString(6, member.getRemarks());
-            stmt.setString(7, member.getAddress());
-            stmt.setString(8, member.getIdCard());
+            stmt.setInt(3, member.getAge());
+            stmt.setString(4, member.getPhone());
+            stmt.setString(5, member.getRemarks());
+            stmt.setString(6, member.getAddress());
+            stmt.setString(7, member.getIdCard());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -119,7 +117,6 @@ public class FamilyInfoDao
                 member.setCensusId(rs.getInt("census_id"));
                 member.setName(rs.getString("name"));
                 member.setRelation(rs.getString("relation"));
-                member.setGender(rs.getString("gender"));
                 member.setAge(rs.getInt("age"));
                 member.setIdCard(rs.getString("id_card"));
                 member.setPhone(rs.getString("phone"));
@@ -156,7 +153,6 @@ public class FamilyInfoDao
                 member.setCensusId(rs.getInt("census_id"));
                 member.setName(rs.getString("name"));
                 member.setRelation(rs.getString("relation"));
-                member.setGender(rs.getString("gender"));
                 member.setAge(rs.getInt("age"));
                 member.setIdCard(rs.getString("id_card"));
                 member.setPhone(rs.getString("phone"));
@@ -219,7 +215,6 @@ public class FamilyInfoDao
                 member.setCensusId(rs.getInt("census_id"));
                 member.setName(rs.getString("name"));
                 member.setRelation(rs.getString("relation"));
-                member.setGender(rs.getString("gender"));
                 member.setAge(rs.getInt("age"));
                 member.setIdCard(rs.getString("id_card"));
                 member.setPhone(rs.getString("phone"));

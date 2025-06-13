@@ -182,7 +182,6 @@ public class QueryPanel extends JPanel implements ActionListener {
                 tableModel.addRow(new Object[]{
                         member.getName(),
                         member.getIdCard(),
-                        member.getGender(),
                         member.getAge(),
                         member.getAddress(),
                         "查看"

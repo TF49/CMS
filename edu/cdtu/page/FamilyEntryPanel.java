@@ -216,7 +216,6 @@ public class FamilyEntryPanel extends JPanel implements ActionListener {
         member.setName(name);
         member.setRelation(relation);
         member.setIdCard(idCard);
-        member.setGender("男"); // 假设默认为男
         member.setAge(age);
         member.setPhone(phone);
         member.setAddress(address);
@@ -231,7 +230,6 @@ public class FamilyEntryPanel extends JPanel implements ActionListener {
                     remarks.isEmpty() ? "-" : remarks);
             familyListModel.addElement(entry);
             pendingMembers.add(member);
-
             memberNameField.setText("");
             idCardField.setText("");
             ageSpinner.setValue(18);
@@ -319,7 +317,6 @@ public class FamilyEntryPanel extends JPanel implements ActionListener {
         updatedMember.setName(name);
         updatedMember.setRelation(relation);
         updatedMember.setIdCard(idCard);
-        updatedMember.setGender("男");
         updatedMember.setAge(age);
         updatedMember.setPhone(phone);
         updatedMember.setAddress(address);

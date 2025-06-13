@@ -5,7 +5,6 @@ public class FamilyMember {
     private int censusId;
     private String name;
     private String relation;
-    private String gender;
     private int age;
     private String idCard;
     private String phone;
@@ -25,9 +24,6 @@ public class FamilyMember {
 
     public String getRelation() { return relation; }
     public void setRelation(String relation) { this.relation = relation; }
-
-    public String getGender() { return gender; }
-    public void setGender(String gender) { this.gender = gender; }
 
     public int getAge() { return age; }
     public void setAge(int age) { this.age = age; }
@@ -51,7 +47,6 @@ public class FamilyMember {
                 ", censusId=" + censusId +
                 ", name='" + name + '\'' +
                 ", relation='" + relation + '\'' +
-                ", gender='" + gender + '\'' +
                 ", age=" + age +
                 ", idCard='" + idCard + '\'' +
                 ", phone='" + phone + '\'' +

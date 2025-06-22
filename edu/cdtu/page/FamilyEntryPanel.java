@@ -230,9 +230,12 @@ public class FamilyEntryPanel extends JPanel implements ActionListener {
                     remarks.isEmpty() ? "-" : remarks);
             familyListModel.addElement(entry);
             pendingMembers.add(member);
+            familyIdField.setText("");
             memberNameField.setText("");
             idCardField.setText("");
             ageSpinner.setValue(18);
+            phoneField.setText("");
+            addressField.setText("");
             remarksArea.setText("");
             relationComboBox.setSelectedItem("其他");
 
@@ -253,7 +256,6 @@ public class FamilyEntryPanel extends JPanel implements ActionListener {
     }
 
     private void clearAllFields() {
-        familyIdField.setText("");
         familyListModel.clear();
         pendingMembers.clear();
     }

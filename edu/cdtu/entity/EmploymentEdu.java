@@ -12,7 +12,6 @@ public class EmploymentEdu {
     private String school;              // 毕业院校
     private String employmentStatus;    // 就业状态
     private String jobTitle;            // 职务/职业
-    private String company;             // 工作单位
     private int enrollmentYear;         // 入学年份
     private int graduationYear;         // 毕业年份
     private String remarks;             // 备注信息
@@ -97,10 +96,6 @@ public class EmploymentEdu {
         return company;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
     public int getEnrollmentYear() {
         return enrollmentYear;
     }
@@ -153,7 +148,6 @@ public class EmploymentEdu {
                 ", school='" + school + '\'' +
                 ", employmentStatus='" + employmentStatus + '\'' +
                 ", jobTitle='" + jobTitle + '\'' +
-                ", company='" + company + '\'' +
                 ", enrollmentYear=" + enrollmentYear +
                 ", graduationYear=" + graduationYear +
                 ", remarks='" + remarks + '\'' +

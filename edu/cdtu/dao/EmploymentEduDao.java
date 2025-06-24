@@ -25,7 +25,7 @@ public class EmploymentEduDao
      */
     public boolean addEmploymentEduInfo(EmploymentEdu info)
     {
-        String sql = "INSERT INTO employment_edu(name, id_card, highest_education, major, school, employment_status, job_title, company, enrollment_year, graduation_year, remarks, census_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employment_edu(name, id_card, highest_education, major, school, employment_status, job_title, enrollment_year, graduation_year, remarks, census_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setString(1, info.getName());
@@ -35,11 +35,10 @@ public class EmploymentEduDao
             stmt.setString(5, info.getSchool());
             stmt.setString(6, info.getEmploymentStatus());
             stmt.setString(7, info.getJobTitle());
-            stmt.setString(8, info.getCompany());
-            stmt.setInt(9, info.getEnrollmentYear());
-            stmt.setInt(10, info.getGraduationYear());
-            stmt.setString(11, info.getRemarks());
-            stmt.setInt(12, info.getCensusId());
+            stmt.setInt(8, info.getEnrollmentYear());
+            stmt.setInt(9, info.getGraduationYear());
+            stmt.setString(10, info.getRemarks());
+            stmt.setInt(11, info.getCensusId());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -85,7 +84,7 @@ public class EmploymentEduDao
      */
     public boolean updateEmploymentEduInfo(EmploymentEdu info)
     {
-        String sql = "UPDATE employment_edu SET name=?, highest_education=?, major=?, school=?, employment_status=?, job_title=?, company=?, enrollment_year=?, graduation_year=?, remarks=?, census_id=? WHERE id_card=?";
+        String sql = "UPDATE employment_edu SET name=?, highest_education=?, major=?, school=?, employment_status=?, job_title=?, enrollment_year=?, graduation_year=?, remarks=?, census_id=? WHERE id_card=?";
         try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setString(1, info.getName());
@@ -94,12 +93,11 @@ public class EmploymentEduDao
             stmt.setString(4, info.getSchool());
             stmt.setString(5, info.getEmploymentStatus());
             stmt.setString(6, info.getJobTitle());
-            stmt.setString(7, info.getCompany());
-            stmt.setInt(8, info.getEnrollmentYear());
-            stmt.setInt(9, info.getGraduationYear());
-            stmt.setString(10, info.getRemarks());
-            stmt.setInt(11, info.getCensusId());
-            stmt.setString(12, info.getIdCard());
+            stmt.setInt(7, info.getEnrollmentYear());
+            stmt.setInt(8, info.getGraduationYear());
+            stmt.setString(9, info.getRemarks());
+            stmt.setInt(10, info.getCensusId());
+            stmt.setString(11, info.getIdCard());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -120,7 +118,7 @@ public class EmploymentEduDao
      */
     public EmploymentEdu getEmploymentEduByIdCard(String idCard)
     {
-        String sql = "SELECT id, name, id_card, census_id, highest_education, major, school, employment_status, job_title, company, enrollment_year, graduation_year, remarks, create_time, update_time FROM employment_edu WHERE id_card = ?";
+        String sql = "SELECT id, name, id_card, census_id, highest_education, major, school, employment_status, job_title, enrollment_year, graduation_year, remarks, create_time, update_time FROM employment_edu WHERE id_card = ?";
         try (Connection conn = DbUtils.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setString(1, idCard);
@@ -138,7 +136,6 @@ public class EmploymentEduDao
                 info.setSchool(rs.getString("school"));
                 info.setEmploymentStatus(rs.getString("employment_status"));
                 info.setJobTitle(rs.getString("job_title"));
-                info.setCompany(rs.getString("company"));
                 info.setEnrollmentYear(rs.getInt("enrollment_year"));
                 info.setGraduationYear(rs.getInt("graduation_year"));
                 info.setRemarks(rs.getString("remarks"));
